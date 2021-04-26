@@ -1,0 +1,7 @@
+{
+	"Parameters": {
+		"API_DEFAULT_LENGTH": "14",
+		"API_DEFAULT_CHARACTER_SET": "$-_.!*'()1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		"API_DEFAULT_COUNT": "1"
+	}
+}

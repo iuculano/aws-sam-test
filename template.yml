@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: pw-gen
+Transform  : AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Handler: app.handler
+    Runtime: nodejs14.x
+    Layers : 
+      - !Ref HelperFunctions
+
+Resources:
+  Password:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri   : src/password
+      Runtime   : nodejs14.x
+      MemorySize: 128
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          API_DEFAULT_LENGTH       : 14
+          API_DEFAULT_CHARACTER_SET: '$-_.!*''()1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+          API_DEFAULT_COUNT        : 1
+          API_DEFAULT_COUNT_MAX    : 20        
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path  : /password
+            Method: get
+            RequestParameters:
+              - method.request.querystring.length
+              - method.request.querystring.characterSet
+              - method.request.querystring.count
+
+  HelperFunctions:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+        LayerName : sam-app-dependencies
+        ContentUri: src/utility
+    Metadata:
+      BuildMethod: nodejs14.x
+      
